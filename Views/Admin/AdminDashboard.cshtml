@@ -1,0 +1,1385 @@
+﻿@{
+    Layout = "~/Views/Shared/_MotoPage.cshtml";
+    ViewBag.Title = "Admin Dashboard - MotoPartsHub";
+}
+
+<style>
+    body {
+        background: #f0f0f0;
+        margin: 0;
+    }
+
+    .admin-layout {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 220px;
+        background: #212121;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        z-index: 200;
+    }
+
+    .sidebar-brand {
+        padding: 20px 20px 16px;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+        .sidebar-brand h6 {
+            color: #fff;
+            font-weight: 800;
+            font-size: 16px;
+            margin: 0 0 2px;
+        }
+
+        .sidebar-brand p {
+            color: #616161;
+            font-size: 11px;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+    .sidebar-nav {
+        flex: 1;
+        padding: 12px 0;
+        overflow-y: auto;
+    }
+
+    .nav-section-label {
+        font-size: 9px;
+        font-weight: 700;
+        color: #424242;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        padding: 14px 20px 6px;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 20px;
+        color: #757575;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        border-left: 3px solid transparent;
+        text-decoration: none;
+    }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        .nav-item:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .nav-item.active {
+            color: #fff;
+            border-left-color: #bf360c;
+            background: rgba(191,54,12,0.1);
+        }
+
+            .nav-item.active i {
+                color: #bf360c;
+            }
+
+    .sidebar-footer {
+        padding: 16px 20px;
+        border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .admin-user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .admin-avatar {
+        width: 32px;
+        height: 32px;
+        background: #bf360c;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 800;
+        color: #fff;
+    }
+
+    .admin-info h6 {
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        margin: 0 0 1px;
+    }
+
+    .admin-info p {
+        color: #616161;
+        font-size: 10px;
+        margin: 0;
+        text-transform: uppercase;
+    }
+
+    .btn-sidebar-logout {
+        width: 100%;
+        background: rgba(191,54,12,0.15);
+        border: 1px solid rgba(191,54,12,0.3);
+        border-radius: 4px;
+        color: #ff7043;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+        .btn-sidebar-logout:hover {
+            background: #bf360c;
+            color: #fff;
+            border-color: #bf360c;
+        }
+
+        .btn-sidebar-logout i {
+            font-size: 15px;
+        }
+
+    .main-content {
+        margin-left: 220px;
+        padding: 24px;
+        flex: 1;
+        width: calc(100% - 220px);
+        box-sizing: border-box;
+    }
+
+        .main-content > div[ng-show] {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+    .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+    }
+
+        .topbar h4 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #212121;
+            margin: 0;
+        }
+
+        .topbar p {
+            font-size: 12px;
+            color: #9e9e9e;
+            margin: 4px 0 0;
+        }
+
+    .btn-add {
+        background: #bf360c;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 10px 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.2s;
+    }
+
+        .btn-add:hover {
+            background: #870000;
+        }
+
+        .btn-add i {
+            font-size: 18px;
+        }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-bottom: 22px;
+    }
+
+    .stat-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 18px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .sc-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+        .sc-icon i {
+            font-size: 22px;
+        }
+
+    .sci-red {
+        background: #fbe9e7;
+    }
+
+        .sci-red i {
+            color: #bf360c;
+        }
+
+    .sci-green {
+        background: #e8f5e9;
+    }
+
+        .sci-green i {
+            color: #388e3c;
+        }
+
+    .sci-orange {
+        background: #fff3e0;
+    }
+
+        .sci-orange i {
+            color: #e65100;
+        }
+
+    .sci-blue {
+        background: #e3f2fd;
+    }
+
+        .sci-blue i {
+            color: #1565c0;
+        }
+
+    .sc-info .num {
+        font-size: 24px;
+        font-weight: 800;
+        color: #212121;
+    }
+
+    .sc-info .lbl {
+        font-size: 11px;
+        color: #9e9e9e;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        font-weight: 600;
+    }
+
+    .sec-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .sec-head {
+        padding: 14px 18px;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+        .sec-head h6 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #212121;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .sec-head h6 i {
+                font-size: 18px;
+                color: #bf360c;
+            }
+
+    .link-view {
+        font-size: 11px;
+        font-weight: 700;
+        color: #bf360c;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        cursor: pointer;
+        background: none;
+        border: none;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .data-table th {
+            font-size: 10px;
+            font-weight: 700;
+            color: #bdbdbd;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+            background: #fafafa;
+        }
+
+        .data-table td {
+            padding: 11px 14px;
+            border-bottom: 1px solid #f9f9f9;
+            font-size: 13px;
+            color: #424242;
+            vertical-align: middle;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover td {
+            background: #fafafa;
+        }
+
+    .td-name {
+        font-weight: 600;
+        color: #212121;
+    }
+
+    .td-sub {
+        font-size: 10px;
+        color: #bdbdbd;
+    }
+
+    .td-cat {
+        font-size: 10px;
+        font-weight: 700;
+        color: #bf360c;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+    }
+
+    .td-price {
+        font-weight: 700;
+        color: #212121;
+    }
+
+    .sp {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 10px;
+        border-radius: 10px;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .sp-in {
+        background: #e8f5e9;
+        color: #388e3c;
+    }
+
+    .sp-low {
+        background: #fff3e0;
+        color: #e65100;
+    }
+
+    .sp-out {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    .sp-active {
+        background: #e8f5e9;
+        color: #388e3c;
+    }
+
+    .sp-inactive {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    .sp-pending {
+        background: #fff3e0;
+        color: #e65100;
+    }
+
+    .sp-responded {
+        background: #e8f5e9;
+        color: #388e3c;
+    }
+
+    .sp-closed {
+        background: #f5f5f5;
+        color: #757575;
+    }
+
+    .action-btns {
+        display: flex;
+        gap: 6px;
+    }
+
+    .btn-edit {
+        background: #e3f2fd;
+        border: none;
+        border-radius: 4px;
+        color: #1565c0;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 5px 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+
+        .btn-edit:hover {
+            background: #1565c0;
+            color: #fff;
+        }
+
+        .btn-edit i {
+            font-size: 14px;
+        }
+
+    .btn-del {
+        background: #ffebee;
+        border: none;
+        border-radius: 4px;
+        color: #c62828;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 5px 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+
+        .btn-del:hover {
+            background: #c62828;
+            color: #fff;
+        }
+
+        .btn-del i {
+            font-size: 14px;
+        }
+
+    .btn-toggle {
+        background: #fff3e0;
+        border: none;
+        border-radius: 4px;
+        color: #e65100;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 5px 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-toggle:hover {
+            background: #e65100;
+            color: #fff;
+        }
+
+    .btn-sm {
+        background: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        color: #616161;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 4px 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-sm:hover {
+            border-color: #bf360c;
+            color: #bf360c;
+        }
+
+    .table-tools {
+        padding: 12px 16px;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .ts-wrap {
+        position: relative;
+        flex: 1;
+        min-width: 160px;
+    }
+
+        .ts-wrap i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #bdbdbd;
+            font-size: 18px;
+            pointer-events: none;
+        }
+
+        .ts-wrap input {
+            width: 100%;
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 9px 12px 9px 38px;
+            font-size: 13px;
+            color: #212121;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+            .ts-wrap input:focus {
+                border-color: #bf360c;
+            }
+
+    /* STRONG OVERRIDE to defeat Materialize's input styles */
+    .ts-wrap {
+        position: relative !important;
+        flex: 1;
+        min-width: 160px;
+        margin: 0 !important;
+    }
+
+        .ts-wrap i.material-icons {
+            position: absolute !important;
+            left: 12px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            color: #9e9e9e !important;
+            font-size: 18px !important;
+            pointer-events: none !important;
+            z-index: 2 !important;
+            margin: 0 !important;
+            line-height: 1 !important;
+        }
+
+        .ts-wrap input,
+        .ts-wrap input[type="text"],
+        .ts-wrap input:not([type]) {
+            width: 100% !important;
+            height: 40px !important;
+            background: #fafafa !important;
+            border: 1px solid #e0e0e0 !important;
+            border-bottom: 1px solid #e0e0e0 !important;
+            border-radius: 4px !important;
+            padding: 0 12px 0 40px !important;
+            margin: 0 !important;
+            font-size: 13px !important;
+            color: #212121 !important;
+            outline: none !important;
+            box-sizing: border-box !important;
+            box-shadow: none !important;
+            display: block !important;
+        }
+
+            .ts-wrap input:focus,
+            .ts-wrap input[type="text"]:focus {
+                border: 1px solid #bf360c !important;
+                border-bottom: 1px solid #bf360c !important;
+                box-shadow: none !important;
+                background: #fff !important;
+            }
+
+    .table-tools {
+        padding: 12px 16px !important;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .cat-filter {
+        background: #fafafa;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 9px 14px;
+        font-size: 13px;
+        color: #424242;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .report-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .report-card {
+        background: #fafafa;
+        border: 1px solid #f0f0f0;
+        border-radius: 8px;
+        padding: 18px;
+    }
+
+        .report-card h6 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #212121;
+            margin: 0 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .report-card h6 i {
+                color: #bf360c;
+                font-size: 18px;
+            }
+
+    .report-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .report-row:last-child {
+            border-bottom: none;
+        }
+
+    .report-label {
+        font-size: 13px;
+        color: #616161;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .rdot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .report-value {
+        font-size: 14px;
+        font-weight: 700;
+        color: #212121;
+    }
+
+    .btn-export {
+        background: #212121;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 8px 16px;
+        cursor: pointer;
+        margin-top: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+        justify-content: center;
+        transition: background 0.2s;
+    }
+
+        .btn-export:hover {
+            background: #bf360c;
+        }
+
+    /* MODAL */
+    .admin-modal {
+        background: #fff;
+        border-radius: 8px;
+        max-width: 520px;
+        max-height: 88vh;
+        overflow-y: auto;
+    }
+
+        .admin-modal .modal-content {
+            padding: 0;
+        }
+
+        .admin-modal .modal-footer {
+            background: #fafafa;
+            border-top: 1px solid #f0f0f0;
+            padding: 12px 22px;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+    .modal-hdr {
+        background: #212121;
+        padding: 18px 24px;
+    }
+
+        .modal-hdr h5 {
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+            margin: 0 0 3px;
+        }
+
+        .modal-hdr p {
+            color: #757575;
+            font-size: 12px;
+            margin: 0;
+        }
+
+    .modal-bdy {
+        padding: 20px 24px;
+    }
+
+        .modal-bdy .input-field input {
+            color: #212121 !important;
+        }
+
+            .modal-bdy .input-field input:focus {
+                border-bottom: 1px solid #212121 !important;
+                box-shadow: 0 1px 0 0 #212121 !important;
+            }
+
+        .modal-bdy .input-field label {
+            color: #9e9e9e !important;
+        }
+
+            .modal-bdy .input-field label.active {
+                color: #212121 !important;
+            }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .form-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: #9e9e9e;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .form-select {
+        width: 100%;
+        background: #fafafa;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 12px 14px;
+        font-size: 13px;
+        color: #424242;
+        outline: none;
+        cursor: pointer;
+        margin-bottom: 8px;
+        box-sizing: border-box;
+    }
+
+        .form-select:focus {
+            border-color: #212121;
+        }
+
+    .btn-save {
+        background: #212121;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 10px 22px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+        .btn-save:hover {
+            background: #bf360c;
+        }
+
+    .btn-cancel-m {
+        background: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        color: #757575;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 10px 18px;
+        cursor: pointer;
+    }
+
+        .btn-cancel-m:hover {
+            background: #e0e0e0;
+        }
+
+    .empty-state {
+        padding: 40px;
+        text-align: center;
+        color: #bdbdbd;
+    }
+
+        .empty-state i {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+    /* CHARTS GRID */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        margin-top: 20px;
+    }
+
+    .chart-card {
+        margin-bottom: 0;
+    }
+
+    .chart-wrap {
+        padding: 16px;
+        height: 260px;
+        position: relative;
+    }
+
+    @@media (max-width: 900px) {
+        .sidebar {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+
+        .main-content {
+            margin-left: 0;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .report-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* FIX modal dropdowns visibility */
+    .admin-modal .modal-bdy select.form-select {
+        display: block !important;
+        width: 100% !important;
+        background: #fafafa !important;
+        border: 1px solid #e0e0e0 !important;
+        border-radius: 4px !important;
+        padding: 12px 14px !important;
+        font-size: 13px !important;
+        color: #424242 !important;
+        height: auto !important;
+        margin: 4px 0 12px !important;
+        appearance: auto !important;
+        -webkit-appearance: menulist !important;
+        -moz-appearance: menulist !important;
+    }
+
+    .admin-modal .modal-bdy .form-label {
+        display: block !important;
+        margin-top: 8px;
+    }
+</style>
+
+<div class="admin-layout" ng-controller="MotoPartsHubController">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <h6>MotoPartsHub</h6>
+            <p>Admin Panel</p>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Main</div>
+            <a class="nav-item" ng-class="{active: activeTab==='dashboard'}" ng-click="activeTab='dashboard'">
+                <i class="material-icons">dashboard</i> Dashboard
+            </a>
+            <div class="nav-section-label">Inventory</div>
+            <a class="nav-item" ng-class="{active: activeTab==='parts'}" ng-click="activeTab='parts'">
+                <i class="material-icons">inventory_2</i> Manage Parts
+            </a>
+            <a class="nav-item" ng-class="{active: activeTab==='categories'}" ng-click="activeTab='categories'">
+                <i class="material-icons">category</i> Categories
+            </a>
+            <a class="nav-item" ng-class="{active: activeTab==='shops'}" ng-click="activeTab='shops'">
+                <i class="material-icons">store</i> Shops
+            </a>
+            <a class="nav-item" ng-class="{active: activeTab==='stock'}" ng-click="activeTab='stock'">
+                <i class="material-icons">monitor_heart</i> Stock Logs
+            </a>
+            <div class="nav-section-label">System</div>
+            <a class="nav-item" ng-class="{active: activeTab==='users'}" ng-click="activeTab='users'">
+                <i class="material-icons">group</i> Users
+            </a>
+            <a class="nav-item" ng-class="{active: activeTab==='inquiries'}" ng-click="activeTab='inquiries'">
+                <i class="material-icons">forum</i> Inquiries
+            </a>
+            <a class="nav-item" ng-class="{active: activeTab==='reports'}" ng-click="activeTab='reports'">
+                <i class="material-icons">bar_chart</i> Reports
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="admin-user">
+                <div class="admin-avatar">A</div>
+                <div class="admin-info"><h6>Administrator</h6><p>Super Admin</p></div>
+            </div>
+            <button class="btn-sidebar-logout" ng-click="adminLogout()">
+                <i class="material-icons">logout</i> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main-content">
+
+        <!-- ── DASHBOARD ── -->
+        <div ng-show="activeTab==='dashboard'">
+            <div class="topbar">
+                <div><h4>Dashboard</h4><p>Welcome back, Administrator.</p></div>
+                <button type="button" class="btn-add" ng-click="activeTab='parts'; openAddModal()">
+                    <i class="material-icons">add</i> Add Part
+                </button>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="sc-icon sci-red"><i class="material-icons">inventory_2</i></div><div class="sc-info"><div class="num">{{ parts.length }}</div><div class="lbl">Total Parts</div></div></div>
+                <div class="stat-card"><div class="sc-icon sci-green"><i class="material-icons">check_circle</i></div><div class="sc-info"><div class="num">{{ inStockCount() }}</div><div class="lbl">In Stock</div></div></div>
+                <div class="stat-card"><div class="sc-icon sci-orange"><i class="material-icons">warning</i></div><div class="sc-info"><div class="num">{{ lowStockCount() }}</div><div class="lbl">Low Stock</div></div></div>
+                <div class="stat-card"><div class="sc-icon sci-blue"><i class="material-icons">remove_shopping_cart</i></div><div class="sc-info"><div class="num">{{ outOfStockCount() }}</div><div class="lbl">Out of Stock</div></div></div>
+            </div>
+            <div class="sec-card">
+                <div class="sec-head">
+                    <h6><i class="material-icons">list_alt</i> Recent Parts</h6>
+                    <button type="button" class="link-view" ng-click="activeTab='parts'">Manage All →</button>
+                </div>
+                <table class="data-table">
+                    <thead><tr><th>Part Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Shop</th><th>Status</th></tr></thead>
+                    <tbody>
+                        <tr ng-repeat="part in parts | limitTo:6">
+                            <td><div class="td-name">{{ part.name }}</div><div class="td-sub">{{ part.sku }}</div></td>
+                            <td><span class="td-cat">{{ part.category }}</span></td>
+                            <td><span class="td-price">₱{{ part.price | number:2 }}</span></td>
+                            <td>{{ part.stock }}</td>
+                            <td style="font-size:12px; color:#9e9e9e;">{{ part.shop }}</td>
+                            <td><span class="sp" ng-class="{'sp-in': part.stock > 5, 'sp-low': part.stock > 0 && part.stock <= 5, 'sp-out': part.stock === 0}">{{ part.stock === 0 ? 'Out' : (part.stock <= 5 ? 'Low' : 'In Stock') }}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ── DASHBOARD CHARTS (moved INSIDE Dashboard ng-show) ── -->
+            <div class="charts-grid">
+                <div class="sec-card chart-card">
+                    <div class="sec-head">
+                        <h6><i class="material-icons">bar_chart</i> Parts per Category</h6>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="chartCategory"></canvas>
+                    </div>
+                </div>
+
+                <div class="sec-card chart-card">
+                    <div class="sec-head">
+                        <h6><i class="material-icons">store</i> Parts per Shop</h6>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="chartShop"></canvas>
+                    </div>
+                </div>
+
+                <div class="sec-card chart-card">
+                    <div class="sec-head">
+                        <h6><i class="material-icons">pie_chart</i> Stock Status</h6>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="chartStock"></canvas>
+                    </div>
+                </div>
+
+                <div class="sec-card chart-card">
+                    <div class="sec-head">
+                        <h6><i class="material-icons">show_chart</i> Stock Changes Over Time</h6>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="chartStockTrend"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── MANAGE PARTS ── -->
+        <div ng-show="activeTab==='parts'">
+            <div class="topbar">
+                <div><h4>Manage Parts</h4><p>Add, edit or remove parts. All changes saved to database.</p></div>
+                <button type="button" class="btn-add" ng-click="openAddModal()"><i class="material-icons">add</i> Add Part</button>
+            </div>
+            <div class="sec-card">
+                <div class="table-tools">
+                    <div class="ts-wrap"><i class="material-icons">search</i><input type="text" ng-model="adminSearch" placeholder="Search parts..." /></div>
+                    <select class="cat-filter" ng-model="adminCatFilter" ng-options="c for c in categories"></select>
+                </div>
+                <table class="data-table">
+                    <thead><tr><th>Part Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Shop</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <tr ng-repeat="part in adminFilteredParts()">
+                            <td><div class="td-name">{{ part.name }}</div><div class="td-sub">{{ part.sku }}</div></td>
+                            <td><span class="td-cat">{{ part.category }}</span></td>
+                            <td><span class="td-price">₱{{ part.price | number:2 }}</span></td>
+                            <td>{{ part.stock }}</td>
+                            <td style="font-size:12px; color:#9e9e9e;">{{ part.shop }}</td>
+                            <td><span class="sp" ng-class="{'sp-in': part.stock > 5, 'sp-low': part.stock > 0 && part.stock <= 5, 'sp-out': part.stock === 0}">{{ part.stock === 0 ? 'Out' : (part.stock <= 5 ? 'Low' : 'In Stock') }}</span></td>
+                            <td><div class="action-btns"><button type="button" class="btn-edit" ng-click="openEditModal(part)"><i class="material-icons">edit</i> Edit</button><button type="button" class="btn-del" ng-click="deletePart(part)"><i class="material-icons">delete</i> Del</button></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── CATEGORIES ── -->
+        <div ng-show="activeTab==='categories'">
+            <div class="topbar">
+                <div><h4>Categories</h4><p>Manage part categories. Delete is blocked if category is in use.</p></div>
+                <button type="button" class="btn-add" ng-click="openAddCategoryModal()"><i class="material-icons">add</i> Add Category</button>
+            </div>
+            <div class="sec-card">
+                <div class="table-tools">
+                    <div class="ts-wrap">
+                        <i class="material-icons">search</i>
+                        <input type="text" ng-model="categorySearch" placeholder="Search categories..." />
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead><tr><th>#</th><th>Category Name</th><th>Description</th><th>Parts Count</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <tr ng-repeat="cat in filteredCategories()">
+                            <td style="color:#bdbdbd;">{{ cat.CategoryId }}</td>
+                            <td class="td-name">{{ cat.CategoryName }}</td>
+                            <td style="color:#9e9e9e; font-size:12px;">{{ cat.Description || '—' }}</td>
+                            <td><span class="sp sp-in">{{ countByCategory(cat.CategoryName) }} parts</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button type="button" class="btn-edit" ng-click="openEditCategoryModal(cat)"><i class="material-icons">edit</i> Edit</button>
+                                    <button type="button" class="btn-del" ng-click="deleteCategory(cat)"><i class="material-icons">delete</i> Del</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── SHOPS ── -->
+        <div ng-show="activeTab==='shops'">
+            <div class="topbar">
+                <div><h4>Shops</h4><p>Manage partner shops. Deactivation is used if shop has active parts.</p></div>
+                <button type="button" class="btn-add" ng-click="openAddShopModal()"><i class="material-icons">add</i> Add Shop</button>
+            </div>
+            <div class="sec-card">
+                <div class="table-tools">
+                    <div class="ts-wrap">
+                        <i class="material-icons">search</i>
+                        <input type="text" ng-model="shopSearch" placeholder="Search shops by name, location, or contact..." />
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead><tr><th>#</th><th>Shop Name</th><th>Location</th><th>Contact</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <tr ng-repeat="shop in filteredShops()">
+                            <td style="color:#bdbdbd;">{{ shop.ShopId }}</td>
+                            <td class="td-name">{{ shop.ShopName }}</td>
+                            <td style="color:#9e9e9e; font-size:12px;">{{ shop.Location || '—' }}</td>
+                            <td style="color:#9e9e9e; font-size:12px;">{{ shop.ContactNo || '—' }}</td>
+                            <td><span class="sp" ng-class="{'sp-active': shop.IsActive===1, 'sp-inactive': shop.IsActive===0}">{{ shop.IsActive === 1 ? 'Active' : 'Inactive' }}</span></td>
+                            <td>
+                                <div class="action-btns">
+                                    <button type="button" class="btn-edit" ng-click="openEditShopModal(shop)"><i class="material-icons">edit</i> Edit</button>
+                                    <button type="button" class="btn-del" ng-click="deleteShop(shop)"><i class="material-icons">block</i> Deactivate</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── STOCK LOGS ── -->
+        <div ng-show="activeTab==='stock'">
+            <div class="topbar"><div><h4>Stock Logs</h4><p>Automatic log created every time stock changes.</p></div></div>
+            <div class="sec-card">
+                <div class="table-tools">
+                    <div class="ts-wrap">
+                        <i class="material-icons">search</i>
+                        <input type="text" ng-model="stockLogSearch" placeholder="Search by Part Name, SKU, Category, Shop, or Reason..." />
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Log ID</th>
+                            <th>Part</th>
+                            <th>SKU</th>
+                            <th>Category</th>
+                            <th>Shop</th>
+                            <th>Old Stock</th>
+                            <th>New Stock</th>
+                            <th>Change</th>
+                            <th>Type</th>
+                            <th>Reason</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="log in filteredStockLogs()">
+                            <td style="color:#bdbdbd;">{{ log.LogId }}</td>
+                            <td class="td-name">{{ log.PartName }}</td>
+                            <td style="font-size:11px; color:#9e9e9e;">{{ log.SKU || '—' }}</td>
+                            <td style="font-size:11px; color:#bf360c; font-weight:700; text-transform:uppercase;">{{ log.CategoryName }}</td>
+                            <td style="font-size:12px; color:#9e9e9e;">{{ log.ShopName }}</td>
+                            <td>{{ log.OldStock }}</td>
+                            <td>{{ log.NewStock }}</td>
+                            <td>
+                                <strong ng-style="{color: log.Change > 0 ? '#2e7d32' : (log.Change < 0 ? '#c62828' : '#757575')}">
+                                    {{ log.Change > 0 ? '+' : '' }}{{ log.Change }}
+                                </strong>
+                            </td>
+                            <td>
+                                <span class="sp" ng-class="{'sp-in': log.ChangeType==='Stock In', 'sp-out': log.ChangeType==='Stock Out', 'sp-closed': log.ChangeType==='No Change'}">
+                                    {{ log.ChangeType }}
+                                </span>
+                            </td>
+                            <td style="font-size:12px; color:#9e9e9e;">{{ log.Reason }}</td>
+                            <td style="font-size:12px; color:#9e9e9e;">{{ formatLogDate(log.ChangedAt) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="empty-state" ng-show="stockLogs.length === 0">
+                    <i class="material-icons">inventory</i>
+                    <p>No stock changes yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── USERS ── -->
+        <div ng-show="activeTab==='users'">
+            <div class="topbar"><div><h4>Registered Users</h4><p>All users registered via the platform.</p></div></div>
+            <div class="sec-card">
+                <div class="table-tools">
+                    <div class="ts-wrap">
+                        <i class="material-icons">search</i>
+                        <input type="text" ng-model="userSearch" placeholder="Search by name, username, or phone..." />
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead><tr><th>#</th><th>Name</th><th>Username</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <tr ng-repeat="u in filteredUsers()">
+                            <td style="color:#bdbdbd;">{{ u.Id }}</td>
+                            <td><div style="display:flex; align-items:center; gap:10px;"><div style="width:30px;height:30px;background:#bf360c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;">{{ u.Name.charAt(0) }}</div><span style="font-weight:600;color:#212121;">{{ u.Name }}</span></div></td>
+                            <td style="color:#616161;">{{ u.Username }}</td>
+                            <td style="color:#616161;">{{ u.Phone }}</td>
+                            <td><span class="sp" ng-class="{'sp-active': u.IsActive===1, 'sp-inactive': u.IsActive===0}">{{ u.IsActive === 1 ? 'Active' : 'Inactive' }}</span></td>
+                            <td><button type="button" class="btn-toggle" ng-click="toggleUser(u)">{{ u.IsActive === 1 ? 'Deactivate' : 'Activate' }}</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="empty-state" ng-show="userArray.length === 0">
+                    <i class="material-icons">person_off</i><p>No registered users yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── INQUIRIES ── -->
+        <div ng-show="activeTab==='inquiries'">
+            <div class="topbar"><div><h4>Inquiries</h4><p>User inquiries saved to database when submitted.</p></div></div>
+            <div class="sec-card">
+                <div class="table-tools">
+                    <div class="ts-wrap">
+                        <i class="material-icons">search</i>
+                        <input type="text" ng-model="inquirySearch" placeholder="Search by message or status..." />
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead><tr><th>ID</th><th>User ID</th><th>Part ID</th><th>Message</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <tr ng-repeat="inq in filteredInquiries()">
+                            <td style="color:#bdbdbd;">{{ inq.InquiryId }}</td>
+                            <td>{{ inq.UserId }}</td>
+                            <td>{{ inq.PartId }}</td>
+                            <td style="font-size:12px; max-width:200px;">{{ inq.Message }}</td>
+                            <td><span class="sp" ng-class="{'sp-pending': inq.Status==='Pending', 'sp-responded': inq.Status==='Responded', 'sp-closed': inq.Status==='Closed'}">{{ inq.Status }}</span></td>
+                            <td style="font-size:12px; color:#9e9e9e;">{{ inq.CreatedAt | date:'short' }}</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button type="button" class="btn-sm" ng-click="updateInquiryStatus(inq, 'Responded')">Responded</button>
+                                    <button type="button" class="btn-sm" ng-click="updateInquiryStatus(inq, 'Closed')">Close</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="empty-state" ng-show="inquiries.length === 0">
+                    <i class="material-icons">forum</i><p>No inquiries yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── REPORTS ── -->
+        <div ng-show="activeTab==='reports'">
+            <div class="topbar"><div><h4>Reports</h4><p>Live summary from the database.</p></div></div>
+            <div class="report-grid">
+                <div class="sec-card">
+                    <div class="sec-head"><h6><i class="material-icons">summarize</i> Inventory Summary</h6></div>
+                    <div style="padding:16px;">
+                        <div class="report-row"><span class="report-label"><span class="rdot" style="background:#212121;"></span> Total Parts</span><span class="report-value">{{ reportData.totalParts }}</span></div>
+                        <div class="report-row"><span class="report-label"><span class="rdot" style="background:#388e3c;"></span> In Stock</span><span class="report-value">{{ reportData.inStock }}</span></div>
+                        <div class="report-row"><span class="report-label"><span class="rdot" style="background:#e65100;"></span> Low Stock</span><span class="report-value">{{ reportData.lowStock }}</span></div>
+                        <div class="report-row"><span class="report-label"><span class="rdot" style="background:#c62828;"></span> Out of Stock</span><span class="report-value">{{ reportData.outOfStock }}</span></div>
+                        <div class="report-row"><span class="report-label"><span class="rdot" style="background:#1565c0;"></span> Registered Users</span><span class="report-value">{{ reportData.totalUsers }}</span></div>
+                        <div class="report-row"><span class="report-label"><span class="rdot" style="background:#6a1b9a;"></span> Total Inquiries</span><span class="report-value">{{ reportData.totalInquiries }}</span></div>
+                        <button type="button" class="btn-export" ng-click="downloadReport()"><i class="material-icons">download</i> Download Reports</button>
+                    </div>
+                </div>
+                <div class="sec-card">
+                    <div class="sec-head"><h6><i class="material-icons">category</i> Parts by Category</h6></div>
+                    <div style="padding:16px;">
+                        <div class="report-row" ng-repeat="item in reportData.byCategory">
+                            <span class="report-label"><span class="rdot" style="background:#bf360c;"></span> {{ item.CategoryName }}</span>
+                            <span class="report-value">{{ item.Count }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="sec-card">
+                    <div class="sec-head"><h6><i class="material-icons">store</i> Parts by Shop</h6></div>
+                    <div style="padding:16px;">
+                        <div class="report-row" ng-repeat="item in reportData.byShop">
+                            <span class="report-label"><span class="rdot" style="background:#1565c0;"></span> {{ item.ShopName }}</span>
+                            <span class="report-value">{{ item.Count }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── PART MODAL ── -->
+    <div id="partModal" class="modal admin-modal">
+        <div class="modal-content" style="padding:0;">
+            <div class="modal-hdr"><h5>{{ editMode ? 'Edit Part' : 'Add New Part' }}</h5><p>{{ editMode ? 'Update part details.' : 'Fill in details to add a new part.' }}</p></div>
+            <div class="modal-bdy">
+                <div class="form-row">
+                    <div class="input-field"><input type="text" id="pName" ng-model="partForm.PartName" /><label for="pName" ng-class="{active: partForm.PartName}">Part Name</label></div>
+                    <div class="input-field"><input type="text" id="pSku" ng-model="partForm.SKU" /><label for="pSku" ng-class="{active: partForm.SKU}">SKU</label></div>
+                </div>
+                <div class="form-row">
+                    <div><span class="form-label">Category</span><select class="form-select" ng-model="partForm.CategoryId"><option ng-repeat="cat in dbCategories" value="{{ cat.CategoryId }}">{{ cat.CategoryName }}</option></select></div>
+                    <div class="input-field"><input type="text" id="pBrand" ng-model="partForm.Brand" /><label for="pBrand" ng-class="{active: partForm.Brand}">Brand</label></div>
+                </div>
+                <div class="form-row">
+                    <div class="input-field"><input type="number" id="pPrice" ng-model="partForm.Price" /><label for="pPrice" ng-class="{active: partForm.Price}">Price (₱)</label></div>
+                    <div class="input-field"><input type="number" id="pStock" ng-model="partForm.Stock" /><label for="pStock" ng-class="{active: partForm.Stock !== undefined}">Stock Qty</label></div>
+                </div>
+                <div><span class="form-label">Shop</span><select class="form-select" ng-model="partForm.ShopId"><option ng-repeat="s in shops" value="{{ s.ShopId }}">{{ s.ShopName }}</option></select></div>
+                <div class="input-field"><input type="text" id="pDesc" ng-model="partForm.ShortDesc" /><label for="pDesc" ng-class="{active: partForm.ShortDesc}">Short Description</label></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-cancel-m modal-close">Cancel</button>
+            <button type="button" class="btn-save" ng-click="savePart()">{{ editMode ? 'Save Changes' : 'Add Part' }}</button>
+        </div>
+    </div>
+
+    <!-- ── CATEGORY MODAL ── -->
+    <div id="categoryModal" class="modal admin-modal">
+        <div class="modal-content" style="padding:0;">
+            <div class="modal-hdr"><h5>{{ editMode ? 'Edit Category' : 'Add Category' }}</h5><p>All changes are saved directly to the database.</p></div>
+            <div class="modal-bdy">
+                <div class="input-field"><input type="text" id="catName" ng-model="catForm.CategoryName" /><label for="catName" ng-class="{active: catForm.CategoryName}">Category Name</label></div>
+                <div class="input-field"><input type="text" id="catDesc" ng-model="catForm.Description" /><label for="catDesc" ng-class="{active: catForm.Description}">Description (optional)</label></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-cancel-m modal-close">Cancel</button>
+            <button type="button" class="btn-save" ng-click="saveCategory()">{{ editMode ? 'Save Changes' : 'Add Category' }}</button>
+        </div>
+    </div>
+
+    <!-- ── SHOP MODAL ── -->
+    <div id="shopModal" class="modal admin-modal">
+        <div class="modal-content" style="padding:0;">
+            <div class="modal-hdr"><h5>{{ editMode ? 'Edit Shop' : 'Add Shop' }}</h5><p>All changes are saved directly to the database.</p></div>
+            <div class="modal-bdy">
+                <div class="input-field"><input type="text" id="shopName" ng-model="shopForm.ShopName" /><label for="shopName" ng-class="{active: shopForm.ShopName}">Shop Name</label></div>
+                <div class="input-field"><input type="text" id="shopLoc" ng-model="shopForm.Location" /><label for="shopLoc" ng-class="{active: shopForm.Location}">Location</label></div>
+                <div class="input-field"><input type="text" id="shopContact" ng-model="shopForm.ContactNo" /><label for="shopContact" ng-class="{active: shopForm.ContactNo}">Contact Number</label></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-cancel-m modal-close">Cancel</button>
+            <button type="button" class="btn-save" ng-click="saveShop()">{{ editMode ? 'Save Changes' : 'Add Shop' }}</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#212121; color:#757575; text-align:center; padding:16px 24px; font-size:12px; margin-left:220px;">
+    &copy; 2026 <span style="color:#bf360c; font-weight:600;">MotoPartsHub</span> &mdash; Motorcycle Parts Inventory &amp; Catalog System. All rights reserved.
+</footer>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<!-- jsPDF + AutoTable for PDF Report -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        M.Modal.init(document.querySelectorAll('.modal'));
+    });
+</script>

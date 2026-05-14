@@ -1,0 +1,819 @@
+﻿@{
+    Layout = "~/Views/Shared/_MotoPage.cshtml";
+    ViewBag.Title = "Dashboard - MotoParts";
+}
+
+<style>
+    body {
+        background: #f5f5f5;
+    }
+
+    .top-nav {
+        background: #bf360c;
+        padding: 0 24px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+    }
+
+        .top-nav .brand {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+            .top-nav .brand span {
+                color: #ffccbc;
+            }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .nav-user {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .nav-avatar {
+        width: 30px;
+        height: 30px;
+        background: rgba(255,255,255,0.25);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .nav-name {
+        font-size: 13px;
+        color: #ffccbc;
+        font-weight: 600;
+    }
+
+    .btn-logout {
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.4);
+        color: #fff;
+        border-radius: 4px;
+        padding: 5px 14px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+        .btn-logout:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .btn-logout i {
+            font-size: 15px;
+        }
+
+    .page-wrap {
+        padding: 72px 24px 48px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* Welcome */
+    .welcome-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .welcome-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .welcome-avatar {
+        width: 48px;
+        height: 48px;
+        background: #bf360c;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 800;
+        color: #fff;
+    }
+
+    .welcome-text h5 {
+        font-size: 17px;
+        font-weight: 700;
+        color: #212121;
+        margin: 0 0 2px;
+    }
+
+        .welcome-text h5 span {
+            color: #bf360c;
+        }
+
+    .welcome-text p {
+        font-size: 12px;
+        color: #9e9e9e;
+        margin: 0;
+    }
+
+    .rider-badge {
+        background: #fbe9e7;
+        border: 1px solid #ffccbc;
+        border-radius: 20px;
+        padding: 5px 14px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #bf360c;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+        .rider-badge i {
+            font-size: 14px;
+        }
+
+    /* Stats */
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 16px 18px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+        .stat-icon i {
+            font-size: 20px;
+        }
+
+    .si-red {
+        background: #fbe9e7;
+    }
+
+        .si-red i {
+            color: #bf360c;
+        }
+
+    .si-green {
+        background: #e8f5e9;
+    }
+
+        .si-green i {
+            color: #388e3c;
+        }
+
+    .si-orange {
+        background: #fff3e0;
+    }
+
+        .si-orange i {
+            color: #e65100;
+        }
+
+    .si-blue {
+        background: #e3f2fd;
+    }
+
+        .si-blue i {
+            color: #1565c0;
+        }
+
+    .stat-info .num {
+        font-size: 22px;
+        font-weight: 800;
+        color: #212121;
+    }
+
+    .stat-info .lbl {
+        font-size: 11px;
+        color: #9e9e9e;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        font-weight: 600;
+    }
+
+    /* Main grid */
+    .main-grid {
+        display: grid;
+        grid-template-columns: 1fr 280px;
+        gap: 16px;
+    }
+
+    /* Section card */
+    .section-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .section-head {
+        padding: 14px 18px;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+        .section-head h6 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #212121;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .section-head h6 i {
+                font-size: 18px;
+                color: #bf360c;
+            }
+
+    .link-all {
+        font-size: 11px;
+        font-weight: 700;
+        color: #bf360c;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+    }
+
+        .link-all:hover {
+            text-decoration: underline;
+        }
+
+    .section-body {
+        padding: 16px 18px;
+    }
+
+    /* Table */
+    .parts-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .parts-table th {
+            font-size: 10px;
+            font-weight: 700;
+            color: #bdbdbd;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .parts-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #f9f9f9;
+            font-size: 13px;
+            color: #424242;
+            vertical-align: middle;
+        }
+
+        .parts-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .parts-table tr:hover td {
+            background: #fafafa;
+        }
+
+    .td-cat {
+        font-size: 9px;
+        font-weight: 700;
+        color: #bf360c;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+    }
+
+    .td-price {
+        font-weight: 800;
+        color: #212121;
+    }
+
+    .sp {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 10px;
+        text-transform: uppercase;
+    }
+
+    .sp-in {
+        background: #e8f5e9;
+        color: #388e3c;
+    }
+
+    .sp-low {
+        background: #fff3e0;
+        color: #e65100;
+    }
+
+    .sp-out {
+        background: #ffebee;
+        color: #c62828;
+    }
+
+    .btn-det {
+        background: transparent;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        color: #9e9e9e;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 4px 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-det:hover {
+            border-color: #bf360c;
+            color: #bf360c;
+        }
+
+    /* Quick actions */
+    .qa-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .qa-item {
+        background: #fafafa;
+        border: 1px solid #f0f0f0;
+        border-radius: 6px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+        .qa-item:hover {
+            border-color: #bf360c;
+            background: #fff8f6;
+        }
+
+    .qa-ico {
+        width: 34px;
+        height: 34px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+        .qa-ico i {
+            font-size: 18px;
+        }
+
+    .qa-txt h6 {
+        font-size: 13px;
+        font-weight: 700;
+        color: #212121;
+        margin: 0 0 1px;
+    }
+
+    .qa-txt p {
+        font-size: 11px;
+        color: #9e9e9e;
+        margin: 0;
+    }
+
+    .qa-arrow {
+        margin-left: auto;
+        color: #e0e0e0;
+        font-size: 18px;
+    }
+
+    .qa-item:hover .qa-arrow {
+        color: #bf360c;
+    }
+
+    /* Category list */
+    .cat-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .cat-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 10px;
+        background: #fafafa;
+        border-radius: 6px;
+        border: 1px solid #f0f0f0;
+    }
+
+    .cat-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .cat-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #bf360c;
+    }
+
+    .cat-lbl {
+        font-size: 13px;
+        color: #424242;
+    }
+
+    .cat-num {
+        font-size: 11px;
+        font-weight: 700;
+        background: #fbe9e7;
+        color: #bf360c;
+        padding: 2px 10px;
+        border-radius: 10px;
+    }
+
+    /* Modal */
+    #detailModal {
+        background: #fff;
+        border-radius: 8px;
+        max-width: 540px;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+        #detailModal .modal-content {
+            padding: 0;
+        }
+
+        #detailModal .modal-footer {
+            background: #fafafa;
+            border-top: 1px solid #f0f0f0;
+            padding: 12px 22px;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+    .modal-hdr {
+        background: #bf360c;
+        padding: 18px 22px;
+    }
+
+        .modal-hdr h5 {
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+            margin: 0 0 3px;
+        }
+
+        .modal-hdr p {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            margin: 0;
+        }
+
+    .modal-bdy {
+        padding: 20px 22px;
+    }
+
+    .modal-price {
+        font-size: 24px;
+        font-weight: 800;
+        color: #212121;
+        margin-bottom: 4px;
+    }
+
+    .modal-desc {
+        font-size: 13px;
+        color: #757575;
+        line-height: 1.5;
+        margin-bottom: 14px;
+    }
+
+    .modal-sec {
+        font-size: 10px;
+        font-weight: 700;
+        color: #bdbdbd;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 14px 0 8px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .spec-tbl {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .spec-tbl td {
+            padding: 6px 4px;
+            font-size: 13px;
+            border-bottom: 1px solid #f9f9f9;
+        }
+
+            .spec-tbl td:first-child {
+                color: #9e9e9e;
+                width: 44%;
+            }
+
+            .spec-tbl td:last-child {
+                color: #212121;
+                font-weight: 500;
+            }
+
+    .feat-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .feat-chip {
+        background: #fbe9e7;
+        border: 1px solid #ffccbc;
+        border-radius: 20px;
+        padding: 3px 12px;
+        font-size: 11px;
+        color: #bf360c;
+        font-weight: 600;
+    }
+
+    .btn-close-m {
+        background: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        color: #757575;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 8px 18px;
+        cursor: pointer;
+    }
+
+        .btn-close-m:hover {
+            background: #e0e0e0;
+        }
+
+    .btn-inq-m {
+        background: #bf360c;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 8px 18px;
+        cursor: pointer;
+    }
+
+        .btn-inq-m:hover {
+            background: #870000;
+        }
+
+    @@media (max-width: 900px) {
+        .stats-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .main-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .page-wrap {
+            padding: 68px 14px 40px;
+        }
+
+        .top-nav {
+            padding: 0 14px;
+        }
+    }
+</style>
+
+<nav class="top-nav">
+    <a class="brand" href="/Moto/LandingPage">Moto<span>Parts</span></a>
+    <div class="nav-right">
+        <div class="nav-user">
+            <div class="nav-avatar">{{ loggedInUser.Name.charAt(0) }}</div>
+            <span class="nav-name">{{ loggedInUser.Name }}</span>
+        </div>
+        <a ng-click="logout()" style="color:#ffccbc; font-size:14px; font-weight:700; text-decoration:none; cursor:pointer; letter-spacing:0.3px;">Logout</a>
+    </div>
+</nav>
+
+<div class="page-wrap">
+
+    <!-- Welcome -->
+    <div class="welcome-card">
+        <div class="welcome-left">
+            <div class="welcome-avatar">{{ loggedInUser.Name.charAt(0) }}</div>
+            <div class="welcome-text">
+                <h5>Welcome back, <span>{{ loggedInUser.Name }}</span>! 👋</h5>
+                <p>Here's an overview of the parts catalog.</p>
+            </div>
+        </div>
+        <div class="rider-badge"><i class="material-icons">verified_user</i> Registered Rider</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon si-red"><i class="material-icons">inventory_2</i></div>
+            <div class="stat-info"><div class="num">{{ parts.length }}</div><div class="lbl">Total Parts</div></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon si-green"><i class="material-icons">check_circle</i></div>
+            <div class="stat-info"><div class="num">{{ inStockCount() }}</div><div class="lbl">In Stock</div></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon si-orange"><i class="material-icons">warning</i></div>
+            <div class="stat-info"><div class="num">{{ lowStockCount() }}</div><div class="lbl">Low Stock</div></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon si-blue"><i class="material-icons">category</i></div>
+            <div class="stat-info"><div class="num">{{ categories.length - 1 }}</div><div class="lbl">Categories</div></div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="main-grid">
+
+        <!-- Parts Table -->
+        <div class="section-card">
+            <div class="section-head">
+                <h6><i class="material-icons">list_alt</i> Parts Overview</h6>
+                <a href="/Moto/LandingPage" class="link-all">Browse All →</a>
+            </div>
+            <div style="padding:0;">
+                <table class="parts-table">
+                    <thead>
+                        <tr>
+                            <th>Part Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="part in parts">
+                            <td>
+                                <div style="font-weight:600; color:#212121;">{{ part.name }}</div>
+                                <div style="font-size:10px; color:#bdbdbd;">{{ part.brand }} &bull; {{ part.sku }}</div>
+                            </td>
+                            <td><span class="td-cat">{{ part.category }}</span></td>
+                            <td><span class="td-price">₱{{ part.price | number:2 }}</span></td>
+                            <td>
+                                <span class="sp" ng-class="{'sp-in': part.stock > 5, 'sp-low': part.stock > 0 && part.stock <= 5, 'sp-out': part.stock === 0}">
+                                    {{ part.stock === 0 ? 'Out' : (part.stock <= 5 ? 'Low' : 'In Stock') }}
+                                </span>
+                            </td>
+                            <td><button class="btn-det" ng-click="viewDetails(part)">Details</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div style="display:flex; flex-direction:column; gap:14px;">
+
+            <!-- Quick Actions -->
+            <div class="section-card">
+                <div class="section-head">
+                    <h6><i class="material-icons">bolt</i> Quick Actions</h6>
+                </div>
+                <div class="section-body">
+                    <div class="qa-list">
+                        <a href="/Moto/LandingPage#catalog" class="qa-item">
+                            <div class="qa-ico si-red"><i class="material-icons">search</i></div>
+                            <div class="qa-txt"><h6>Browse Catalog</h6><p>Search all parts</p></div>
+                            <i class="material-icons qa-arrow">chevron_right</i>
+                        </a>
+                        <a href="/Moto/LandingPage#catalog" class="qa-item">
+                            <div class="qa-ico si-blue"><i class="material-icons">filter_list</i></div>
+                            <div class="qa-txt"><h6>Filter by Category</h6><p>Find parts by type</p></div>
+                            <i class="material-icons qa-arrow">chevron_right</i>
+                        </a>
+                        <div class="qa-item" ng-click="logout()">
+                            <div class="qa-ico si-orange"><i class="material-icons">logout</i></div>
+                            <div class="qa-txt"><h6>Logout</h6><p>Sign out</p></div>
+                            <i class="material-icons qa-arrow">chevron_right</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="section-card">
+                <div class="section-head">
+                    <h6><i class="material-icons">category</i> Categories</h6>
+                </div>
+                <div class="section-body">
+                    <div class="cat-list">
+                        <div class="cat-row" ng-repeat="cat in categories" ng-if="cat !== 'All'">
+                            <div class="cat-left"><div class="cat-dot"></div><span class="cat-lbl">{{ cat }}</span></div>
+                            <span class="cat-num">{{ countByCategory(cat) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL -->
+<div id="detailModal" class="modal">
+    <div class="modal-content" ng-if="selectedPart" style="padding:0;">
+        <div class="modal-hdr">
+            <h5>{{ selectedPart.name }}</h5>
+            <p>{{ selectedPart.brand }} &bull; {{ selectedPart.category }}</p>
+        </div>
+        <div class="modal-bdy">
+            <div class="modal-price">₱{{ selectedPart.price | number:2 }}</div>
+            <div class="modal-desc">{{ selectedPart.shortDesc }}</div>
+            <div class="modal-sec">Technical Specifications</div>
+            <table class="spec-tbl">
+                <tr ng-repeat="(key, val) in selectedPart.specs">
+                    <td>{{ key }}</td>
+                    <td>{{ val }}</td>
+                </tr>
+            </table>
+            <div class="modal-sec">Features</div>
+            <div class="feat-list">
+                <span class="feat-chip" ng-repeat="f in selectedPart.features">{{ f }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" ng-if="selectedPart">
+        <button class="btn-close-m modal-close">Close</button>
+        <button class="btn-inq-m" ng-click="inquirePart(selectedPart)">Inquire Now</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        M.Modal.init(document.querySelectorAll('.modal'));
+    });
+</script>
+
+<!-- FOOTER -->
+<footer style="background:#212121; color:#757575; text-align:center; padding:16px 24px; font-size:12px;">
+    &copy; 2026 <span style="color:#bf360c; font-weight:600;">MotoPartsHub</span> &mdash; Motorcycle Parts Inventory &amp; Catalog System. All rights reserved.
+</footer>
